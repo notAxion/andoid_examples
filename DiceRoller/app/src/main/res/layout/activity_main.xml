@@ -12,8 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/dice_1"
+        android:src="@drawable/empty_dice"
+        tools:src="@drawable/dice_1"
         />
+<!--    using tools:src only shows a dummy data
+        where and what it would look if it had that drawable resource
+        instead of empty_dice which is what its actually gonna show
+        after compilation and the tools namespace would be removed like a comment-->
     <TextView
         android:id="@+id/result_text"
         android:layout_width="wrap_content"
@@ -31,3 +36,4 @@
         />
 
 </LinearLayout>
+
