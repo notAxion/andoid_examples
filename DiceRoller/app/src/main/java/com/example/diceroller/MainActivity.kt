@@ -2,11 +2,13 @@ package com.example.diceroller
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.diceroller.databinding.ActivityMainBinding
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var diceImage: ImageView
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 //            rollButton.text = "rolled"
 //            Toast.makeText(this@MainActivity, "Let's roll", Toast.LENGTH_SHORT).show()
         }
+
+        diceImage = binding.diceImage
     }
 
     private fun rollDice() {
@@ -33,8 +37,8 @@ class MainActivity : AppCompatActivity() {
             5 -> R.drawable.dice_5
             else -> R.drawable.dice_6
         }
-        val diceImage = binding.diceImage
         diceImage.setImageResource(drawableRES)
 
     }
 }
+
