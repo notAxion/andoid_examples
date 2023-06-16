@@ -22,12 +22,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun addNickName() {
-        val editView = binding.nicknameEdit
-        val nicknameText = binding.nicknameText
+//        val editView = binding.nicknameEdit
+//        val nicknameText = binding.nicknameText
 
-        nicknameText.text = editView.text
-        editView.visibility = View.GONE
-        nicknameText.visibility = View.VISIBLE
+        binding.apply {
+            nicknameText.text = nicknameEdit.text
+            nicknameEdit.visibility = View.GONE
+            nicknameText.visibility = View.VISIBLE
+        }
 
         // Hide the keyboard
         // no clue how it works yet
