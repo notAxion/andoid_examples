@@ -9,11 +9,13 @@ import com.example.aboutme.databinding.ActivityMainBinding
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val myName: MyName = MyName("Alex Mercer")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.myName = myName
 
         binding.doneButton.setOnClickListener{
             addNickName()
@@ -26,7 +28,9 @@ class MainActivity : ComponentActivity() {
 //        val nicknameText = binding.nicknameText
 
         binding.apply {
-            nicknameText.text = nicknameEdit.text
+//            nicknameText.text = nicknameEdit.text
+            myName?.nickname = nicknameEdit.text.toString()
+            invalidateAll()
             nicknameEdit.visibility = View.GONE
             nicknameText.visibility = View.VISIBLE
         }
