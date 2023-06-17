@@ -99,16 +99,16 @@ class GameFragment : Fragment() {
                         binding.invalidateAll()
                     } else {
                         // We've won!  Navigate to the gameWonFragment.
-                        val gameWonDirections: NavDirections = GameFragmentDirections
+                        val toGameWonDirections: NavDirections = GameFragmentDirections
                             .actionGameFragmentToGameWonFragment(numQuestions,questionIndex)
 
-                        view.findNavController().navigate(gameWonDirections)
+                        view.findNavController().navigate(toGameWonDirections)
                     }
                 } else {
                     // Game over! A wrong answer sends us to the gameOverFragment.
-                    val gameOverDirections: NavDirections = GameFragmentDirections
+                    val toGameOverDirections: NavDirections = GameFragmentDirections
                         .actionGameFragmentToGameOverFragment2()
-                    view.findNavController().navigate(gameOverDirections)
+                    view.findNavController().navigate(toGameOverDirections)
                 }
             }
         }
