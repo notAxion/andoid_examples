@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.android.navigation.databinding.FragmentGameBinding
 
@@ -98,11 +99,16 @@ class GameFragment : Fragment() {
                         binding.invalidateAll()
                     } else {
                         // We've won!  Navigate to the gameWonFragment.
-                        view.findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+                        val gameWonDirections: NavDirections = GameFragmentDirections
+                            .actionGameFragmentToGameWonFragment(numQuestions,questionIndex)
+
+                        view.findNavController().navigate(gameWonDirections)
                     }
                 } else {
                     // Game over! A wrong answer sends us to the gameOverFragment.
-                    view.findNavController().navigate(R.id.action_gameFragment_to_gameOverFragment2)
+                    val gameOverDirections: NavDirections = GameFragmentDirections
+                        .actionGameFragmentToGameOverFragment2()
+                    view.findNavController().navigate(gameOverDirections)
                 }
             }
         }
