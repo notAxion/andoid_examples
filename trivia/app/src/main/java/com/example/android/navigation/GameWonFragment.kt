@@ -53,6 +53,14 @@ class GameWonFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.winner_menu, menu)
+
+        // check if the activity resolves
+        //
+        // ie. if there is any app that can
+        // the intent type that we trying to open
+        if (null == getShareIntent().resolveActivity(requireActivity().packageManager)) {
+            menu.findItem(R.id.share).isVisible = false
+        }
     }
 
     private fun getShareIntent(): Intent {
