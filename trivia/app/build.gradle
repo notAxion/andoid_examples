@@ -58,6 +58,7 @@ dependencies {
     // Core
     implementation "androidx.core:core:$version_core"
 
+    // add this dependency for the hamburger menu
     // Material Design
     implementation "com.google.android.material:material:$version_material"
 
