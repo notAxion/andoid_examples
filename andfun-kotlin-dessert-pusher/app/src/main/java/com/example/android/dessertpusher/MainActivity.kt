@@ -152,6 +152,11 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        Timber.i("onRestart called")
+    }
+
     override fun onStart() {
         super.onStart()
         Timber.i("onStart called")
