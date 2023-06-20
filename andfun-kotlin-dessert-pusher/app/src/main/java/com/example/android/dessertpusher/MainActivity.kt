@@ -29,6 +29,10 @@ import androidx.lifecycle.LifecycleObserver
 import com.example.android.dessertpusher.databinding.ActivityMainBinding
 import timber.log.Timber
 
+private const val KEY_REVENUE = "key_revenue"
+private const val KEY_DESERT_SOLD = "key_dessert_sold"
+private const val KEY_DESSERT_TIMER = "key_dessert_timer"
+
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     private var revenue = 0
@@ -81,8 +85,14 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         dessertTimer = DessertTimer(this.lifecycle)
 
         // Set the TextViews to the right values
-        binding.revenue = revenue
-        binding.amountSold = dessertsSold
+        // or get them from the saved instance if the app is restarted
+        binding.revenue = savedInstanceState?.getInt(KEY_REVENUE) ?: revenue
+
+        binding.amountSold = savedInstanceState?.getInt(KEY_DESERT_SOLD) ?: dessertsSold
+
+        savedInstanceState?.getInt(KEY_DESSERT_TIMER)?.let { timer ->
+            dessertTimer.secondsCount = timer
+        }
 
         // Make sure the correct dessert is showing
         binding.dessertButton.setImageResource(currentDessert.imageId)
@@ -157,6 +167,10 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_DESERT_SOLD, dessertsSold)
+        outState.putInt(KEY_DESSERT_TIMER, dessertTimer.secondsCount)
+
         Timber.i("onSaveInstanceState is called")
     }
 
