@@ -84,11 +84,13 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
         dessertTimer = DessertTimer(this.lifecycle)
 
-        // Set the TextViews to the right values
-        // or get them from the saved instance if the app is restarted
-        binding.revenue = savedInstanceState?.getInt(KEY_REVENUE) ?: revenue
+        // get the values from the saved instance if the app has restarted
+        revenue = savedInstanceState?.getInt(KEY_REVENUE) ?: revenue
+        dessertsSold = savedInstanceState?.getInt(KEY_DESERT_SOLD) ?: dessertsSold
 
-        binding.amountSold = savedInstanceState?.getInt(KEY_DESERT_SOLD) ?: dessertsSold
+        // Set the TextViews to the right values
+        binding.revenue = revenue
+        binding.amountSold = dessertsSold
 
         savedInstanceState?.getInt(KEY_DESSERT_TIMER)?.let { timer ->
             dessertTimer.secondsCount = timer
