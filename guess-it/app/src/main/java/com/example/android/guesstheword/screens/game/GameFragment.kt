@@ -70,6 +70,7 @@ class GameFragment : Fragment() {
         viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { hasFinished->
             if (hasFinished) {
                 gameFinished()
+                viewModel.onGameFinishComplete()
             }
         })
 
@@ -81,10 +82,9 @@ class GameFragment : Fragment() {
      * Called when the game is finished
      */
     private fun gameFinished() {
-//        val action = GameFragmentDirections.actionGameToScore(
-//            score = viewModel.score.value ?: 0
-//        )
-//        findNavController(this).navigate(action)
-        Toast.makeText(context, "Game has finished", Toast.LENGTH_SHORT).show()
+        val action = GameFragmentDirections.actionGameToScore(
+            score = viewModel.score.value ?: 0
+        )
+        findNavController(this).navigate(action)
     }
 }
