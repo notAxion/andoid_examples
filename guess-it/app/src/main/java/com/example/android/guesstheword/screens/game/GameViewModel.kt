@@ -1,5 +1,7 @@
 package com.example.android.guesstheword.screens.game
 
+import android.os.CountDownTimer
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,6 +9,27 @@ import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
 class GameViewModel: ViewModel() {
+
+    companion object {
+        // These represent different important times in the game,
+        // such as game length
+
+        // To represent when the game is over
+        private const val DONE = 0L
+
+        // Number of milliseconds in a second
+        private const val ONE_SECOND = 1000L
+
+        // This is the total time of the game
+        private const val COUNTDOWN_TIME = 11000L
+    }
+
+    private val timer: CountDownTimer
+
+    private val _timerText = MutableLiveData<String>()
+    val timerText : LiveData<String>
+        get() = _timerText
+
     // The current word
     private val _word = MutableLiveData<String>()
     val word : LiveData<String>
@@ -31,10 +54,22 @@ class GameViewModel: ViewModel() {
 
         _score.value = 0
         _eventGameFinish.value = false
+
+        timer = object: CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
+            override fun onTick(t0: Long) {
+                _timerText.value = DateUtils.formatElapsedTime(t0/ ONE_SECOND)
+            }
+
+            override fun onFinish() {
+                _eventGameFinish.value = true
+            }
+        }
+        timer.start()
     }
 
     override fun onCleared() {
         super.onCleared()
+        timer.cancel()
         Timber.i("GameViewModel destroyed!!")
     }
 
@@ -43,11 +78,11 @@ class GameViewModel: ViewModel() {
      */
     private fun nextWord() {
         //Select and remove a word from the list
+        // and reset the list cause we want a timer based game
         if (wordList.isEmpty()) {
-            _eventGameFinish.value = true
-        } else {
-            _word.value = wordList.removeAt(0)
+            resetList()
         }
+        _word.value = wordList.removeAt(0)
     }
 
     /**
