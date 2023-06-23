@@ -18,6 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.guesstheword">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:name=".PusherApplication"
         android:allowBackup="true"

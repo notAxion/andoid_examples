@@ -3,7 +3,9 @@ package com.example.android.guesstheword.screens.game
 import android.os.CountDownTimer
 import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
@@ -21,7 +23,10 @@ class GameViewModel: ViewModel() {
         private const val ONE_SECOND = 1000L
 
         // This is the total time of the game
-        private const val COUNTDOWN_TIME = 11000L
+        private const val COUNTDOWN_TIME = 61000L
+
+        // This is the warning buzzer time
+        private const val WARNING_BUZZER_TIME = 10000L
     }
 
     private val timer: CountDownTimer
@@ -54,6 +59,19 @@ class GameViewModel: ViewModel() {
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
 
+//    private val _buzzer = MutableLiveData<BuzzType>()
+//    val buzzer : LiveData<BuzzType>
+//        get() = _buzzer
+
+    private val _buzzer = MediatorLiveData<BuzzType>()
+
+    /**
+     * !! don't forget to call the [onBuzzerBuzzingComplete]
+     * to finish the event
+     */
+    val buzzer : LiveData<BuzzType>
+        get() = _buzzer
+
     init {
         Timber.i("GameViewModel created!!")
         resetList()
@@ -69,10 +87,12 @@ class GameViewModel: ViewModel() {
 
             override fun onFinish() {
                 _currentTime.value = DONE
+                _buzzer.value = BuzzType.GAME_OVER
                 _eventGameFinish.value = true
             }
         }
         timer.start()
+        setupBuzzers()
     }
 
     override fun onCleared() {
@@ -133,9 +153,42 @@ class GameViewModel: ViewModel() {
     fun onCorrect() {
         _score.value = _score.value?.inc()
         nextWord()
+        _buzzer.value = BuzzType.CORRECT
     }
 
     fun onGameFinishComplete() {
         _eventGameFinish.value = false
     }
+
+    /**
+     * setup when the buzzers would happen
+     */
+    private fun setupBuzzers() {
+        _buzzer.apply {
+            addSource(currentTime, Observer { timeInSeconds->
+                if (timeInSeconds < (WARNING_BUZZER_TIME / ONE_SECOND)) {
+                    _buzzer.value = BuzzType.COUNTDOWN_PANIC
+//                    _buzzer.removeSource(currentTime)
+                }
+            })
+        }
+    }
+
+    fun onBuzzerBuzzingComplete() {
+        _buzzer.value = BuzzType.NO_BUZZ
+    }
+}
+
+private val CORRECT_BUZZ_PATTERN = longArrayOf(100, 100, 100, 100, 100, 100)
+private val PANIC_BUZZ_PATTERN = longArrayOf(0, 200)
+private val GAME_OVER_BUZZ_PATTERN = longArrayOf(0, 2000)
+private val NO_BUZZ_PATTERN = longArrayOf(0)
+
+enum class BuzzType(val pattern: LongArray) {
+    CORRECT(CORRECT_BUZZ_PATTERN),
+    GAME_OVER(GAME_OVER_BUZZ_PATTERN),
+    COUNTDOWN_PANIC(PANIC_BUZZ_PATTERN),
+    NO_BUZZ(NO_BUZZ_PATTERN)
+
+
 }
