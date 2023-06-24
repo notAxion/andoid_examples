@@ -17,17 +17,15 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.formatNights
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -37,10 +35,6 @@ import kotlinx.coroutines.withContext
 class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
-
-    private val viewModelJob = Job()
-
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val tonight = MutableLiveData<SleepNight?>()
 
@@ -62,7 +56,7 @@ class SleepTrackerViewModel(
     }
 
     private fun initializeTonight() {
-        uiScope.launch {
+        viewModelScope.launch {
             tonight.value = getTonightFromDatabase()
         }
     }
@@ -78,7 +72,7 @@ class SleepTrackerViewModel(
     }
 
     fun onStartTracker() {
-        uiScope.launch {
+        viewModelScope.launch {
             val newNight = SleepNight()
             insert(newNight)
 
@@ -93,7 +87,7 @@ class SleepTrackerViewModel(
     }
 
     fun onStopTracker() {
-        uiScope.launch {
+        viewModelScope.launch {
             val oldNight = tonight.value ?: return@launch
             oldNight.endTimeMilli = System.currentTimeMillis()
 
@@ -109,7 +103,7 @@ class SleepTrackerViewModel(
     }
 
     fun onClear() {
-        uiScope.launch {
+        viewModelScope.launch {
             clear()
         }
     }
@@ -118,11 +112,6 @@ class SleepTrackerViewModel(
         withContext(Dispatchers.IO) {
             database.clear()
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 }
 
