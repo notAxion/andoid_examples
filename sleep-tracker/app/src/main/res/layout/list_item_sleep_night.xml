@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="sleepNight"
+            type="com.example.android.trackmysleepquality.database.SleepNight" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +23,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_sleep_5" />
+            tools:srcCompat="@drawable/ic_sleep_5"
+            app:sleepImage="@{sleepNight}"/>
 
         <TextView
             android:id="@+id/sleep_length"
@@ -33,6 +37,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/quality_image"
             app:layout_constraintTop_toTopOf="@+id/quality_image"
+            app:sleepDurationFormatted="@{sleepNight}"
             tools:text="Wednesday" />
 
         <TextView
@@ -46,6 +51,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/quality_image"
             app:layout_constraintTop_toBottomOf="@+id/sleep_length"
+            app:sleepQualityString="@{sleepNight}"
             tools:text="Excellent!!" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
