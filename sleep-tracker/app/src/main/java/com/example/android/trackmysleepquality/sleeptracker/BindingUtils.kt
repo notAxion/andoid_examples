@@ -32,8 +32,8 @@ import com.example.android.trackmysleepquality.database.SleepNight
 // }
 // so that we don't have extra property on all of the ImageView
 @BindingAdapter("sleepImage")
-fun ImageView.setSleepImage(item: SleepNight) {
-    setImageResource(/* resId = */when (item.sleepQuality) {
+fun ImageView.setSleepImage(item: SleepNight?) {
+    setImageResource(/* resId = */when (item?.sleepQuality) {
         0 -> R.drawable.ic_sleep_0
         1 -> R.drawable.ic_sleep_1
         2 -> R.drawable.ic_sleep_2
